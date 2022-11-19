@@ -1,0 +1,21 @@
+<odoo>
+    <record id="fleet_vehicle_view_form_extend" model="ir.ui.view">
+        <field name="name">Ajout des champ *Peut être louer* et *Peut être vendu* a vehicule</field>
+        <field name="model">fleet.vehicle</field>
+        <field name="inherit_id" ref="fleet.fleet_vehicle_view_form" />
+
+        <field name="arch" type="xml">
+            <field name="tag_ids" position="after">
+                <div>
+                    <label for="sale_ok" />
+                    <field name="sale_ok" />
+                    <br />
+                    <label for="rent_ok" />
+                    <field name="rent_ok"> Peut être loué </field>
+                </div>
+
+            </field>
+        </field>
+
+    </record>
+</odoo>
