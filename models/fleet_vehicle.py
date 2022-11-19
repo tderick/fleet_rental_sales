@@ -5,13 +5,6 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-# DESCRIPTION_SALE = """
-# Numéro DE SERIE: <b>{}</b>
-# IMMAT: <b>{}</b>
-# Mise en circulation: <b>{}</b>
-# Carburant: <b>{}</b>
-# KM: <b>{} {}</b>
-# """
 
 DESCRIPTION_SALE = """
 Numéro DE SERIE: {}
@@ -52,8 +45,15 @@ class FleetVehicleExtend(models.Model):
 
         Product = self.env['product.template']
 
-        description = DESCRIPTION_SALE.format("",
-                                              fleet.license_plate, fleet.acquisition_date, fleet.fuel_type, fleet.odometer, fleet.odometer_unit)
+        # Get the translated value of fuel_type
+        fuel_type = dict(self._fields['fuel_type']._description_selection(
+            self.env)).get(fleet.fuel_type)
+        # Get the translated value of odometer_unit
+        odometer_unit = dict(self._fields['odometer_unit']._description_selection(
+            self.env)).get(fleet.odometer_unit)
+
+        description = DESCRIPTION_SALE.format(fleet.vin_sn,
+                                              fleet.license_plate, fleet.acquisition_date, fuel_type, fleet.odometer, odometer_unit)
 
         # If the product can be sold
         if fleet.sale_ok:
@@ -81,3 +81,9 @@ class FleetVehicleExtend(models.Model):
                 product.update({"active": False})
 
         return overwrite_write
+
+    @api.model
+    def _name_search(self, name, args=None, operator="ilike", limit=100, name_get_uid=None):
+        args = args or []
+        domain = [("rent_ok", "=", True)]
+        return self._search(domain+args, limit=limit, access_rights_uid=name_get_uid)
