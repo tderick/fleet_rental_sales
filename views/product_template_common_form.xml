@@ -1,0 +1,23 @@
+<odoo>
+    <record id="product_product_template_form_view_extend" model="ir.ui.view">
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view" />
+
+        <field name="arch" type="xml">
+            <field name="company_id" position="before">
+
+                <field name="is_vehicle" attrs="{'invisible':1}" />
+
+                <label for="product_price" class="oe_edit_only" groups="base.group_user" attrs="{'invisible': [('is_vehicle', '=', True)]}" />
+                <div name="standard_price_uom" groups="base.group_user" attrs="{'invisible': [('is_vehicle', '=', True)]}" class="o_row">
+                    <field name="product_price" class="oe_edit_only" widget="monetary" options="{'currency_field': 'cost_currency_id', 'field_digits': True}" />
+                    <span groups="uom.group_uom" class="oe_read_only">
+                        per
+                        <field name="uom_name" />
+                    </span>
+                </div>
+            </field>
+        </field>
+
+    </record>
+</odoo>

@@ -28,6 +28,7 @@
         'views/account_move_form.xml',
         'views/car_contract_result_form.xml',
         'views/fleet_vehicle_log_contract_form.xml',
-
+        'views/product_template_product_form.xml',
+        'views/product_template_common_form.xml'
     ]
 }

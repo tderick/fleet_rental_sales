@@ -71,7 +71,8 @@ class FleetVehicleExtend(models.Model):
                     "name": fleet.name,
                     "type": "product",
                     "qty_available": 1,
-                    "description_sale": description
+                    "description_sale": description,
+                    "is_vehicle": True
                 })
         else:
             if Product.search_count([('name', 'like', old_fleet_name)]) >= 1:

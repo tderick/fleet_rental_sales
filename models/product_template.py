@@ -12,6 +12,10 @@ class ProductExtend(models.Model):
     standard_price = fields.Float(
         readonly=True, compute="_compute_standard_price")
 
+    product_price = fields.Float(string="Prix du produit")
+
+    is_vehicle = fields.Boolean(default=False)
+
     def _compute_standard_price(self):
         """"Compute the standard_price dynamically based on the invoice associate to it.
         When an invoice is produced for an action on a vehicle, the *cost price(a.k.a standard_price)* 
@@ -28,16 +32,20 @@ class ProductExtend(models.Model):
             vehicle = self.env['fleet.vehicle'].search(
                 [("name", "=", product.name)], limit=1)
 
-            # The first price of the product is the net car value price from fleet
-            product.standard_price = vehicle.net_car_value
+            if len(vehicle) == 1:
 
-            # Use the found vehicle to get all the validated invoice associated to that vehicle
-            invoices = self.env['account.move'].search(
-                ['&', ('vehicle_id', "=", vehicle.id), ("state", "=", "posted")])
+                # The first price of the product is the net car value price from fleet
+                product.standard_price = vehicle.net_car_value
 
-            # Loop through each invoice and add the total amount to the standard_price of the product
-            for invoice in invoices:
-                product.standard_price += invoice.amount_total
+                # Use the found vehicle to get all the validated invoice associated to that vehicle
+                invoices = self.env['account.move'].search(
+                    ['&', ('vehicle_id', "=", vehicle.id), ("state", "=", "posted")])
+
+                # Loop through each invoice and add the total amount to the standard_price of the product
+                for invoice in invoices:
+                    product.standard_price += invoice.amount_total
+            else:
+                product.standard_price = product.product_price
 
     @api.model
     def search_read(self, domain=None, fields=None, offset=0, limit=None, order=None):
