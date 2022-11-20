@@ -81,15 +81,9 @@ class FleetVehicleExtend(models.Model):
 
         return overwrite_write
 
-    # @api.model
-    # def _name_search(self, name, args=None, operator="ilike", limit=100, name_get_uid=None):
-
-    #     logger.critical("=================================>", self._context)
-    #     logger.critical("=================================>", self)
-    #     logger.critical("=================================>", name)
-    #     logger.critical("=================================>", args)
-    #     logger.critical("=================================>", name_get_uid)
-
-    #     args = args or []
-    #     domain = [("rent_ok", "=", True)]
-    #     return self._search(domain+args, limit=limit, access_rights_uid=name_get_uid)
+    def unlink(self):
+        fleet_name = self.name
+        override_unlink = super(FleetVehicleExtend, self).unlink()
+        self.env['product.template'].search(
+            [('name', '=', fleet_name)]).unlink()
+        return override_unlink
