@@ -1,0 +1,14 @@
+<odoo>
+    <record id="fleet_fleet_vehicle_log_contract_view_form_extend" model="ir.ui.view">
+        <field name="name">Ajout du filtre sur permettant de verifier si la voiture est en location ou pas </field>
+        <field name="model">fleet.vehicle.log.contract</field>
+        <field name="inherit_id" ref="fleet.fleet_vehicle_log_contract_view_form" />
+
+        <field name="arch" type="xml">
+            <field name="vehicle_id" position="replace">
+                <field name="vehicle_id" domain="[('rent_ok', '=', True)]" />
+            </field>
+        </field>
+
+    </record>
+</odoo>

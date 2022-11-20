@@ -10,7 +10,7 @@
         Long description of module's purpose
     """,
 
-    'author': "My Company",
+    'author': "DERICK TEMFACK",
     'website': "https://github.com/tderick/fleet_rental_sales",
 
     # Categories can be used to filter modules in modules listing
@@ -20,17 +20,14 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'fleet', 'sale_management', 'stock'],
+    'depends': ['base', 'fleet', 'sale_management', 'stock', 'account'],
 
     # always loaded
     'data': [
-        # 'security/ir.model.access.csv',
-        # 'views/views.xml',
-        # 'views/templates.xml',
-        'views/fleet_vehicle_view_form.xml'
-    ],
-    # only loaded in demonstration mode
-    'demo': [
-        'demo/demo.xml',
-    ],
+        'views/fleet_vehicle_view_form.xml',
+        'views/account_move_form.xml',
+        'views/car_contract_result_form.xml',
+        'views/fleet_vehicle_log_contract_form.xml',
+
+    ]
 }

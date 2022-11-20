@@ -63,15 +63,14 @@ class FleetVehicleExtend(models.Model):
                     [('name', 'like', old_fleet_name)])
                 product.update({
                     "name": fleet.name,
-                    "standard_price": fleet.net_car_value,
                     "active": True,
                     "description_sale": description
                 })
             else:
                 Product.create({
                     "name": fleet.name,
-                    "standard_price": fleet.net_car_value,
                     "type": "product",
+                    "qty_available": 1,
                     "description_sale": description
                 })
         else:
@@ -82,8 +81,15 @@ class FleetVehicleExtend(models.Model):
 
         return overwrite_write
 
-    @api.model
-    def _name_search(self, name, args=None, operator="ilike", limit=100, name_get_uid=None):
-        args = args or []
-        domain = [("rent_ok", "=", True)]
-        return self._search(domain+args, limit=limit, access_rights_uid=name_get_uid)
+    # @api.model
+    # def _name_search(self, name, args=None, operator="ilike", limit=100, name_get_uid=None):
+
+    #     logger.critical("=================================>", self._context)
+    #     logger.critical("=================================>", self)
+    #     logger.critical("=================================>", name)
+    #     logger.critical("=================================>", args)
+    #     logger.critical("=================================>", name_get_uid)
+
+    #     args = args or []
+    #     domain = [("rent_ok", "=", True)]
+    #     return self._search(domain+args, limit=limit, access_rights_uid=name_get_uid)

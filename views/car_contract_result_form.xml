@@ -1,0 +1,14 @@
+<odoo>
+    <record id="fleet_rental_car_rental_contract_form_view_extend" model="ir.ui.view">
+        <field name="name">Ajout du filtre sur permettant de verifier si la voiture est en location ou pas </field>
+        <field name="model">car.rental.contract</field>
+        <field name="inherit_id" ref="fleet_rental.car_rental_contract_form_view" />
+
+        <field name="arch" type="xml">
+            <field name="vehicle_id" position="replace">
+                <field name="vehicle_id" domain="[('rental_check_availability','=',True),('state_id.name','!=','Inactive'),('rent_ok', '=', True)]" options="{'no_create': True}" />
+            </field>
+        </field>
+
+    </record>
+</odoo>
