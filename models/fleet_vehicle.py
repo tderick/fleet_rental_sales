@@ -67,12 +67,21 @@ class FleetVehicleExtend(models.Model):
                     "description_sale": description
                 })
             else:
-                Product.create({
+                product = Product.create({
                     "name": fleet.name,
                     "type": "product",
-                    "qty_available": 1,
                     "description_sale": description,
                     "is_vehicle": True
+                })
+
+                # Create the initial stock for the product and set it to 1
+                warehouse = self.env['stock.warehouse'].search([], limit=1)
+                self.env['stock.quant'].create({
+                    'product_id': product.id,
+                    'inventory_quantity': 1,
+                    'available_quantity': 1,
+                    'quantity': 1,
+                    'location_id': warehouse.lot_stock_id.id,
                 })
         else:
             if Product.search_count([('name', 'like', old_fleet_name)]) >= 1:
