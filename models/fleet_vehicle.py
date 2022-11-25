@@ -90,7 +90,7 @@ class FleetVehicleExtend(models.Model):
 
             # Create the initial stock for the product and set it to 1
             warehouse = self.env['stock.warehouse'].search([], limit=1)
-            self.env['stock.quant'].create({
+            self.env['stock.quant'].sudo().create({
                 'product_id': product.id,
                 'inventory_quantity': 1,
                 'available_quantity': 1,
