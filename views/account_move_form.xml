@@ -6,7 +6,10 @@
 
         <field name="arch" type="xml">
             <field name="payment_reference" position="after">
-                <field name="car_id" />
+                <field name="car_id" attrs="{
+                    'invisible': [('move_type', 'in', ('out_invoice', 'out_refund', 'out_receipt'))], 
+                    'required': [('move_type', 'not in', ('out_invoice', 'out_refund', 'out_receipt'))]}" />
+
             </field>
         </field>
 
