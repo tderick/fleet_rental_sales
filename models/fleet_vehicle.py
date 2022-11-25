@@ -20,9 +20,18 @@ class FleetVehicleExtend(models.Model):
 
     license_plate = fields.Char(
         required=True, help="Plate d'immatriculation sans espace ni caractères spéciaux")
+    odometer = fields.Float(required=True)
+    acquisition_date = fields.Date(required=True)
+    vin_sn = fields.Char(required=True)
+    net_car_value = fields.Float(required=True)
+    seats = fields.Integer(required=True)
+    transmission = fields.Selection(required=True)
+    fuel_type = fields.Selection(required=True)
 
-    sale_ok = fields.Boolean(string="Peut être vendu", default=False)
     rent_ok = fields.Boolean(string="Peut être loué", default=False)
+
+    taxes_id = fields.Many2many(
+        "account.tax", string="Taxes à la vente", required=True)
 
     @api.constrains('license_plate')
     def _constrain_licence_plate_valid(self):
@@ -30,6 +39,13 @@ class FleetVehicleExtend(models.Model):
             if not self.license_plate.isalnum():
                 raise ValidationError(
                     "Plaque d'immatricuation invalide. Utilisez uniquement des lettres et des chiffres sans espace.")
+
+    @api.constrains('seats')
+    def _constrain_seats_non_nul(self):
+        for record in self:
+            if record.seats <= 0:
+                raise ValidationError(
+                    "Le nombre de places dans le véhicule ne peut être nul ou négatif. Veuillez entrer une valeur supérieure à 0")
 
     def write(self, values):
         Fleet = self.env['fleet.vehicle']
@@ -55,39 +71,32 @@ class FleetVehicleExtend(models.Model):
         description = DESCRIPTION_SALE.format(fleet.vin_sn,
                                               fleet.license_plate, fleet.acquisition_date, fuel_type, fleet.odometer, odometer_unit)
 
-        # If the product can be sold
-        if fleet.sale_ok:
-
-            if Product.search_count([('name', 'like', old_fleet_name)]) >= 1:
-                product = Product.search(
-                    [('name', 'like', old_fleet_name)])
-                product.update({
-                    "name": fleet.name,
-                    "active": True,
-                    "description_sale": description
-                })
-            else:
-                product = Product.create({
-                    "name": fleet.name,
-                    "type": "product",
-                    "description_sale": description,
-                    "is_vehicle": True
-                })
-
-                # Create the initial stock for the product and set it to 1
-                warehouse = self.env['stock.warehouse'].search([], limit=1)
-                self.env['stock.quant'].create({
-                    'product_id': product.id,
-                    'inventory_quantity': 1,
-                    'available_quantity': 1,
-                    'quantity': 1,
-                    'location_id': warehouse.lot_stock_id.id,
-                })
+        if Product.search_count([('name', 'like', old_fleet_name)]) >= 1:
+            product = Product.search(
+                [('name', 'like', old_fleet_name)])
+            product.update({
+                "name": fleet.name,
+                "taxes_id": fleet.taxes_id,
+                "description_sale": description
+            })
         else:
-            if Product.search_count([('name', 'like', old_fleet_name)]) >= 1:
-                product = Product.search(
-                    [('name', '=', old_fleet_name)], limit=1)
-                product.update({"active": False})
+            product = Product.create({
+                "name": fleet.name,
+                "type": "product",
+                "taxes_id": fleet.taxes_id,
+                "description_sale": description,
+                "is_vehicle": True
+            })
+
+            # Create the initial stock for the product and set it to 1
+            warehouse = self.env['stock.warehouse'].search([], limit=1)
+            self.env['stock.quant'].create({
+                'product_id': product.id,
+                'inventory_quantity': 1,
+                'available_quantity': 1,
+                'quantity': 1,
+                'location_id': warehouse.lot_stock_id.id,
+            })
 
         return overwrite_write
 

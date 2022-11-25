@@ -6,7 +6,7 @@
 
         <field name="arch" type="xml">
             <field name="payment_reference" position="after">
-                <field name="vehicle_id" />
+                <field name="car_id" />
             </field>
         </field>
 

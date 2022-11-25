@@ -39,7 +39,7 @@ class ProductExtend(models.Model):
 
                 # Use the found vehicle to get all the validated invoice associated to that vehicle
                 invoices = self.env['account.move'].search(
-                    ['&', ('vehicle_id', "=", vehicle.id), ("state", "=", "posted")])
+                    ['&', ('car_id', "=", vehicle.id), ("state", "=", "posted")])
 
                 # Loop through each invoice and add the total amount to the standard_price of the product
                 for invoice in invoices:

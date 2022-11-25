@@ -9,5 +9,5 @@ logger = logging.getLogger(__name__)
 class AccountMove(models.Model):
     _inherit = "account.move"
 
-    vehicle_id = fields.Many2one(
+    car_id = fields.Many2one(
         "fleet.vehicle", string="Véhicule concerné")

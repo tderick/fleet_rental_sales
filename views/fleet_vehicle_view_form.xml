@@ -7,13 +7,14 @@
         <field name="arch" type="xml">
             <field name="tag_ids" position="after">
                 <div>
-                    <label for="sale_ok" />
-                    <field name="sale_ok" />
-                    <br />
                     <label for="rent_ok" />
                     <field name="rent_ok"> Peut être loué </field>
                 </div>
 
+            </field>
+
+            <field name="net_car_value" position="after">
+                <field name="taxes_id" widget="many2many_tags" can_create="true" can_write="true" modifiers="{}" id="taxes_id" />
             </field>
         </field>
 
