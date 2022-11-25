@@ -88,15 +88,16 @@ class FleetVehicleExtend(models.Model):
                 "is_vehicle": True
             })
 
-            # Create the initial stock for the product and set it to 1
-            warehouse = self.env['stock.warehouse'].search([], limit=1)
-            self.env['stock.quant'].sudo().create({
-                'product_id': product.id,
-                'inventory_quantity': 1,
-                'available_quantity': 1,
-                'quantity': 1,
-                'location_id': warehouse.lot_stock_id.id,
-            })
+            if len(product) >= 1:
+                # Create the initial stock for the product and set it to 1
+                warehouse = self.env['stock.warehouse'].search([], limit=1)
+                self.env['stock.quant'].sudo().create({
+                    'product_id': product.id,
+                    'inventory_quantity': 1,
+                    'available_quantity': 1,
+                    'quantity': 1,
+                    'location_id': warehouse.lot_stock_id.id,
+                })
 
         return overwrite_write
 
