@@ -28,6 +28,7 @@ class ProductExtend(models.Model):
         """
 
         for product in self:
+            self.standard_price = 0.0
             # Search the vehicle associated to the current product
             vehicle = self.env['fleet.vehicle'].search(
                 [("name", "=", product.name)], limit=1)
@@ -54,13 +55,3 @@ class ProductExtend(models.Model):
             domain, fields, offset, limit, order)
 
         return res
-
-
-class SimpleProductExtend(models.Model):
-    _inherit = "product.product"
-
-    @api.model
-    def _name_search(self, name, args=None, operator="ilike", limit=100, name_get_uid=None):
-        args = args or []
-        domain = [("active", "=", True), ('qty_available', '>', 0)]
-        return self._search(domain+args, limit=limit, access_rights_uid=name_get_uid)
