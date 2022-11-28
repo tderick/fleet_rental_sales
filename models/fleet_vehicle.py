@@ -12,6 +12,8 @@ IMMAT: {}
 Mise en circulation: {}
 Carburant: {}
 KM: {} {}
+
+Garantie: {} mois (Moteur et boîte)
 """
 
 
@@ -27,6 +29,11 @@ class FleetVehicleExtend(models.Model):
     seats = fields.Integer(required=True)
     transmission = fields.Selection(required=True)
     fuel_type = fields.Selection(required=True)
+
+    nbre_warranty_month = fields.Integer(
+        "Nombre de mois de garantie", required=True)
+    nbre_warranty_km = fields.Integer(
+        "Nombre de KM de garantie", required=True)
 
     rent_ok = fields.Boolean(string="Peut être loué", default=False)
 
@@ -69,7 +76,7 @@ class FleetVehicleExtend(models.Model):
             self.env)).get(fleet.odometer_unit)
 
         description = DESCRIPTION_SALE.format(fleet.vin_sn,
-                                              fleet.license_plate, fleet.acquisition_date, fuel_type, fleet.odometer, odometer_unit)
+                                              fleet.license_plate, fleet.acquisition_date, fuel_type, fleet.odometer, odometer_unit, fleet.nbre_warranty_month)
 
         if Product.search_count([('name', 'like', old_fleet_name)]) >= 1:
             product = Product.search(

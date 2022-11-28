@@ -16,6 +16,17 @@
             <field name="net_car_value" position="after">
                 <field name="taxes_id" widget="many2many_tags" can_create="true" can_write="true" modifiers="{}" id="taxes_id" />
             </field>
+
+            <field name="company_id" position="after">
+                <label for="nbre_warranty_month" attrs="{'invisible': [('vehicle_type', '!=', 'car')]}" />
+                <div class="o_row" attrs="{'invisible': [('vehicle_type', '!=', 'car')]}">
+                    <field name="nbre_warranty_month" />
+                </div>
+                <label for="nbre_warranty_km" attrs="{'invisible': [('vehicle_type', '!=', 'car')]}" />
+                <div class="o_row" attrs="{'invisible': [('vehicle_type', '!=', 'car')]}">
+                    <field name="nbre_warranty_km" />
+                </div>
+            </field>
         </field>
 
     </record>

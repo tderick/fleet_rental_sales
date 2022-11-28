@@ -13,7 +13,6 @@ class SimpleProductExtend(models.Model):
         readonly=True, compute="_compute_cost")
 
     def _compute_cost(self):
-
         for product in self:
             product.cost = 0.0
             product_template = self.env['product.template'].search(
