@@ -13,7 +13,7 @@ Mise en circulation: {}
 Carburant: {}
 KM: {} {}
 
-Garantie: {} mois (Moteur et boîte)
+Garantie: {} mois ou {} km (Moteur et boîte)
 """
 
 
@@ -76,7 +76,7 @@ class FleetVehicleExtend(models.Model):
             self.env)).get(fleet.odometer_unit)
 
         description = DESCRIPTION_SALE.format(fleet.vin_sn,
-                                              fleet.license_plate, fleet.acquisition_date, fuel_type, fleet.odometer, odometer_unit, fleet.nbre_warranty_month)
+                                              fleet.license_plate, fleet.acquisition_date, fuel_type, fleet.odometer, odometer_unit, fleet.nbre_warranty_month, fleet.nbre_warranty_km)
 
         if Product.search_count([('name', 'like', old_fleet_name)]) >= 1:
             product = Product.search(
